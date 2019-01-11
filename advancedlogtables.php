@@ -166,20 +166,21 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
 
     if (Civi::settings()->get('advancedlogtables_index_id')) {
       // Check if current table has an "id" column. If so, index it too
-      $dsn = DB::parseDSN(CIVICRM_LOGGING_DSN);
+      $dsn = DB::parseDSN(CIVICRM_DSN);
       $dbName = $dsn['database'];
-      $dao = CRM_Core_DAO::executeQuery("
-      SELECT COLUMN_NAME
-      FROM   INFORMATION_SCHEMA.COLUMNS
-      WHERE  TABLE_SCHEMA = '{$dbName}'
-      AND    TABLE_NAME = '{$tableName}'
-      AND    COLUMN_NAME = 'id'
-      ");
+      $dao = CRM_Core_DAO::executeQuery(
+        "SELECT
+          COLUMN_NAME
+        FROM
+          INFORMATION_SCHEMA.COLUMNS
+        WHERE
+          TABLE_SCHEMA = '{$dbName}' AND
+          TABLE_NAME = '{$tableName}' AND
+          COLUMN_NAME = 'id'"
+      );
       if ($dao->fetch()) {
         $logTableSpec[$tableName]['indexes']['index_id'] = 'id';
       }
     }
-    var_dump($logTableSpec);
-
   }
 }
