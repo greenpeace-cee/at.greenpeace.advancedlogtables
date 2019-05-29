@@ -193,8 +193,7 @@ function _advancedlogtables_civix_civicrm_disable() {
  * @param $op string, the type of operation being performed; 'check' or 'enqueue'
  * @param $queue CRM_Queue_Queue, (for 'enqueue') the modifiable list of pending up upgrade tasks
  *
- * @return mixed  based on op. for 'check', returns array(boolean) (TRUE if upgrades are pending)
- *                for 'enqueue', returns void
+ * @return mixed
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_upgrade
  */
@@ -254,6 +253,7 @@ function _advancedlogtables_civix_find_files($dir, $pattern) {
   }
   return $result;
 }
+
 /**
  * (Delegated) Implements hook_civicrm_managed().
  *
@@ -453,8 +453,6 @@ function _advancedlogtables_civix_civicrm_alterSettingsFolders(&$metaDataFolders
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_entityTypes
  */
-
 function _advancedlogtables_civix_civicrm_entityTypes(&$entityTypes) {
-  $entityTypes = array_merge($entityTypes, array (
-  ));
+  $entityTypes = array_merge($entityTypes, array());
 }

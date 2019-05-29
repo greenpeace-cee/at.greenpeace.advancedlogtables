@@ -1,5 +1,7 @@
 # at.greenpeace.advancedlogtables
 
+[![CircleCI](https://circleci.com/gh/greenpeace-cee/at.greenpeace.advancedlogtables.svg?style=svg)](https://circleci.com/gh/greenpeace-cee/at.greenpeace.advancedlogtables)
+
 Advanced settings for detailed logging (log tables).
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
