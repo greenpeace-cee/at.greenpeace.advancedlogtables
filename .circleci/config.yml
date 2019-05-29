@@ -1,0 +1,76 @@
+version: 2.1
+commands:
+  install_civicrm:
+    description: "Install CiviCRM"
+    parameters:
+      build_name:
+        type: string
+        default: master
+      type:
+        type: string
+        default: drupal-clean
+      version:
+        type: string
+        default: master
+      url:
+        type: string
+        default: http://localhost:8080
+    steps:
+      - run: su - buildkit -c "/buildkit/bin/civibuild create << parameters.build_name >> --civi-ver << parameters.version >> --type << parameters.type >> --url << parameters.url >>"
+  install_extension:
+    description: "Install Extension"
+    parameters:
+      build_name:
+        type: string
+        default: master
+    steps:
+      - run: |
+          cp /root/project /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME -r
+          chown buildkit:buildkit /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME -R
+          su - buildkit -c "cd /buildkit/build/<< parameters.build_name >> && cv en $CIRCLE_PROJECT_REPONAME"
+  run_civilint:
+    description: "Run civilint"
+    parameters:
+      build_name:
+        type: string
+        default: master
+    steps:
+      - run: su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && civilint *"
+  run_phpunit:
+    description: "Run PHPUnit"
+    parameters:
+      build_name:
+        type: string
+        default: master
+    steps:
+      - run: su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && phpunit5"
+
+
+jobs:
+  build:
+    docker:
+      - image: michaelmcandrew/civicrm-buildkit
+        name: civicrm
+        environment:
+          TERM: xterm-color
+          APACHE_RUN_USER: buildkit
+      - image: mysql:5.7
+        name: mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: buildkit
+    steps:
+      - checkout
+      - install_civicrm
+      - install_extension
+      - run_civilint
+      - run_phpunit
+      - install_civicrm:
+          build_name: civi-5.13
+          version: "5.13"
+          url: http://localhost:8082
+      - install_extension:
+          build_name: civi-5.13
+      - run_civilint:
+          build_name: civi-5.13
+      - run_phpunit:
+          build_name: civi-5.13
