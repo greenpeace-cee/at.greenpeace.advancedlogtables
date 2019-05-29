@@ -1,7 +1,6 @@
 <?php
 
 require_once 'advancedlogtables.civix.php';
-use CRM_Advancedlogtables_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_config().
