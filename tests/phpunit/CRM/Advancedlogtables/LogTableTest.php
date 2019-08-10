@@ -70,7 +70,7 @@ class CRM_Advancedlogtables_LogTableTest extends \PHPUnit_Framework_TestCase imp
     Civi::settings()->set('advancedlogtables_storage_engine', 'MyISAM');
 
     // update log table schema
-    $this->callApiSuccess('System', 'updatelogtables');
+    $this->callApiSuccess('System', 'updatelogtables', []);
 
     // verify table engine was changed
     $log_table = CRM_Core_DAO::executeQuery('SHOW CREATE TABLE log_civicrm_acl');
