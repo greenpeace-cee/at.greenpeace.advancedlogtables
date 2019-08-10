@@ -41,11 +41,12 @@ cv en advancedlogtables
 ## Configuration
 
 Advanced log tables ships with a default configuration based on the [nz.co.fuzion.innodbtriggers](https://github.com/eileenmcnaughton/nz.co.fuzion.innodbtriggers)
-extension, enabling InnoDB, table compression and creating various indexes for
-all log tables to speed up changelog reports.
+extension, enabling the InnoDB storage engine, table compression and creating
+various log table indexes to speed up change log reports.
 
-**If you're happy with the default configuration, you can skip the configuration
-section.**
+**The default configuration works well for most sites and should only be
+changed if necessary and after extensive testing. You can skip this section
+if you're happy with the defaults.**
 
 Advanced log tables supports the following settings:
 
@@ -59,7 +60,7 @@ Advanced log tables supports the following settings:
 | `advancedlogtables_index_id`              | `TRUE`                                   | Whether to create indexes on ID columns. Significantly improves the performance of change log reports.                                                                                                                                                 |
 
 Settings can be changed using the API, for example with the APIv3 explorer or
-using the command line:
+the command line:
 
     cv api Setting.create advancedlogtables_storage_engine="MyISAM"
 
@@ -73,18 +74,26 @@ be installed on the database server as well as configuration and tuning.
 ## Usage
 
 This extension does not automatically enable detailed logging or change the
-storage engine of existing log tables. When you first install the extension
-or change any of its settings, and detailed logging was enabled at any point
-on your site, you will need to run the `System.updatelogtables` API call to
-migrate existing log tables. It is highly recommended to run this migration
-in a test environment initially, and to perform a database backup before
-deployment. For larger sites, it is recommended to run the migration via
-command line to avoid timeouts:
+storage engine of existing log tables. When you install the extension or change
+any of its settings, and detailed logging was enabled at any point on your site,
+you will need to run the `System.updatelogtables` API call to migrate existing
+log tables. If you're enabling logging for the first time after installing this
+extension, you may skip this step, but it is safe to run it regardless if you're
+uncertain.
+
+It is highly recommended to run `System.updatelogtables` in a test environment
+with a full copy of your database initially, and to perform a database backup
+before deployment. MySQL will rewrite all log tables during this operation,
+which may cause performance issues or deadlocks while the process is running.
+
+For larger sites, it is recommended to run the migration via command line to
+avoid PHP timeouts in the middle of the migration:
 
     cv api System.updatelogtables
 
-If you want to change the engine configuration after logging is already
-enabled, you will need to add the `updateChangedEngineConfig` parameter:
+If you want to change the engine configuration (`advancedlogtables_storage_engine_config`)
+after logging has already been enabled, you will need to add the
+`updateChangedEngineConfig` parameter:
 
     cv api System.updatelogtables updateChangedEngineConfig=1
 
