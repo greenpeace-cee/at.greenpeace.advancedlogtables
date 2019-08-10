@@ -39,8 +39,8 @@ class CRM_Advancedlogtables_LogTableTest extends \PHPUnit_Framework_TestCase imp
     Civi::settings()->set('logging', FALSE);
     // remove test log table if it exists
     CRM_Core_DAO::executeQuery('DROP TABLE IF EXISTS log_civicrm_acl');
-    // reset Civis static cache which might hold outdated schema specs
-    \Civi::reset();
+    // remove cached schema spec
+    \Civi::$statics['CRM_Logging_Schema']['columnSpecs'] = [];
   }
 
   /**

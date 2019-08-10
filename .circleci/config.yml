@@ -25,9 +25,11 @@ commands:
         default: master
     steps:
       - run: |
-          cp /root/project /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME -r
-          chown buildkit:buildkit /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME -R
-          su - buildkit -c "cd /buildkit/build/<< parameters.build_name >> && cv en $CIRCLE_PROJECT_REPONAME"
+          EXT_DIR=/buildkit/build/<< parameters.build_name >>/web/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME
+          cp /root/project $EXT_DIR -r
+          chown buildkit:buildkit $EXT_DIR -R
+          cd $EXT_DIR
+          su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/web && cv en $CIRCLE_PROJECT_REPONAME"
   run_civilint:
     description: "Run civilint"
     parameters:
@@ -35,7 +37,7 @@ commands:
         type: string
         default: master
     steps:
-      - run: su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && civilint *"
+      - run: su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/web/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && find . -type f -not -path './vendor/*' | civilint"
   run_phpunit:
     description: "Run PHPUnit"
     parameters:
@@ -43,11 +45,37 @@ commands:
         type: string
         default: master
     steps:
-      - run: su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && phpunit5"
+      - run: su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/web/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && phpunit5"
+  run_all:
+    description: "Run all steps"
+    parameters:
+      build_name:
+        type: string
+        default: master
+      type:
+        type: string
+        default: drupal-clean
+      version:
+        type: string
+        default: master
+      url:
+        type: string
+        default: http://localhost:8080
+    steps:
+      - install_civicrm:
+          build_name: << parameters.build_name >>
+          type: << parameters.type >>
+          version: << parameters.version >>
+          url: << parameters.url >>
+      - install_extension:
+          build_name: << parameters.build_name >>
+      - run_civilint:
+          build_name: << parameters.build_name >>
+      - run_phpunit:
+          build_name: << parameters.build_name >>
 
-
-jobs:
-  build:
+executors:
+  civicrm:
     docker:
       - image: michaelmcandrew/civicrm-buildkit
         name: civicrm
@@ -58,19 +86,84 @@ jobs:
         name: mysql
         environment:
           MYSQL_ROOT_PASSWORD: buildkit
+
+jobs:
+  build_mysql_5_7:
+    executor: civicrm
     steps:
       - checkout
-      - install_civicrm
-      - install_extension
-      - run_civilint
-      - run_phpunit
-      - install_civicrm:
+      - run_all
+      - run_all:
           build_name: civi-5.13
           version: "5.13"
+          url: http://localhost:8081
+      - run_all:
+          build_name: civi-5.16
+          version: "5.16"
           url: http://localhost:8082
-      - install_extension:
+  build_mariadb_10_2:
+    executor: civicrm
+    docker:
+      - image: michaelmcandrew/civicrm-buildkit
+        name: civicrm
+        environment:
+          TERM: xterm-color
+          APACHE_RUN_USER: buildkit
+      - image: mariadb:10.2
+        name: mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: buildkit
+    steps:
+      - checkout
+      - run_all
+      - run_all:
           build_name: civi-5.13
-      - run_civilint:
+          version: "5.13"
+          url: http://localhost:8081
+      - run_all:
+          build_name: civi-5.16
+          version: "5.16"
+          url: http://localhost:8082
+  build_mariadb_10_3:
+    executor: civicrm
+    docker:
+      - image: michaelmcandrew/civicrm-buildkit
+        name: civicrm
+        environment:
+          TERM: xterm-color
+          APACHE_RUN_USER: buildkit
+      - image: mariadb:10.3
+        name: mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: buildkit
+    steps:
+      - checkout
+      - run_all
+      - run_all:
           build_name: civi-5.13
-      - run_phpunit:
-          build_name: civi-5.13
+          version: "5.13"
+          url: http://localhost:8081
+      - run_all:
+          build_name: civi-5.16
+          version: "5.16"
+          url: http://localhost:8082
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_mysql_5_7
+      - build_mariadb_10_2
+      - build_mariadb_10_3
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 5 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build_mysql_5_7
+      - build_mariadb_10_2
+      - build_mariadb_10_3
