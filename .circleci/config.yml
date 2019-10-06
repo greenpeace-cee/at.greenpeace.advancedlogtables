@@ -50,7 +50,10 @@ commands:
         type: string
         default: master
     steps:
-      - run: su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/web/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && phpunit5"
+      - run: |
+          mkdir -p /phpunit /coverage
+          chown buildkit:buildkit /phpunit /coverage
+          su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/web/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && phpdbg -qrr /buildkit/bin/phpunit5 --log-junit /phpunit/<< parameters.build_name >>/junit.xml --coverage-html /coverage/<< parameters.build_name >>"
   run_all:
     description: "Run all steps"
     parameters:
@@ -78,6 +81,12 @@ commands:
           build_name: << parameters.build_name >>
       - run_phpunit:
           build_name: << parameters.build_name >>
+      - store_test_results:
+          path: /phpunit
+      - store_artifacts:
+          path: /phpunit
+      - store_artifacts:
+          path: /coverage
 
 executors:
   civicrm:
