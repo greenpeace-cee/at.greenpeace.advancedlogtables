@@ -53,7 +53,7 @@ commands:
       - run: |
           mkdir -p /phpunit /coverage
           chown buildkit:buildkit /phpunit /coverage
-          su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/web/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && phpdbg -qrr /buildkit/bin/phpunit5 --log-junit /phpunit/<< parameters.build_name >>/junit.xml --coverage-html /coverage/<< parameters.build_name >>"
+          su - buildkit -c "cd /buildkit/build/<< parameters.build_name >>/web/sites/default/files/civicrm/ext/$CIRCLE_PROJECT_REPONAME && command -v phpdbg && phpdbg -qrr /buildkit/bin/phpunit5 --log-junit /phpunit/<< parameters.build_name >>/junit.xml --coverage-html /coverage/<< parameters.build_name >> || /buildkit/bin/phpunit5 --log-junit /phpunit/<< parameters.build_name >>/junit.xml"
   run_all:
     description: "Run all steps"
     parameters:
@@ -161,6 +161,25 @@ jobs:
           build_name: civi-5.13
           version: "5.13"
           url: http://localhost:8082
+  build_php_5_6:
+    executor: civicrm
+    docker:
+      - image: michaelmcandrew/civicrm-buildkit:php5.6
+        name: civicrm
+        environment:
+          TERM: xterm-color
+          APACHE_RUN_USER: buildkit
+      - image: mariadb:10.2
+        name: mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: buildkit
+    steps:
+      - checkout
+      - run_all:
+          build_name: civi-5.13
+          version: "5.13"
+          url: http://localhost:8082
+
 
 workflows:
   version: 2
@@ -169,6 +188,7 @@ workflows:
       - build_mysql_5_7
       - build_mariadb_10_2
       - build_mariadb_10_3
+      - build_php_5_6
   nightly:
     triggers:
       - schedule:
