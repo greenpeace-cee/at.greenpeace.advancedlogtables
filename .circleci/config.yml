@@ -106,7 +106,7 @@ jobs:
     executor: civicrm
     steps:
       - checkout
-      - run_all
+      # - run_all
       - run_all:
           build_name: civi-stable
           version: "stable"
