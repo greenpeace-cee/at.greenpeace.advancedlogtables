@@ -100,6 +100,8 @@ executors:
         name: mysql
         environment:
           MYSQL_ROOT_PASSWORD: buildkit
+      - image: djfarrelly/maildev
+        name: maildev
 
 jobs:
   build_mysql_5_7:
@@ -127,6 +129,8 @@ jobs:
         name: mysql
         environment:
           MYSQL_ROOT_PASSWORD: buildkit
+      - image: djfarrelly/maildev
+        name: maildev
     steps:
       - checkout
       - run_all
@@ -150,6 +154,8 @@ jobs:
         name: mysql
         environment:
           MYSQL_ROOT_PASSWORD: buildkit
+      - image: djfarrelly/maildev
+        name: maildev
     steps:
       - checkout
       - run_all
