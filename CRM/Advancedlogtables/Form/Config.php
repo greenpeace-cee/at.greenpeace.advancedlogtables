@@ -12,7 +12,7 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
   public function buildQuickForm() {
 
     $pseudovars = C::singleton()->getParams();
-    $this->addElement('select', 'excludedtables', E::ts('Tables for exclusion/inclusion', ['domain' => 'at.greenpeace.advancedlogtabled']), $pseudovars['tables'],
+    $this->addElement('select', 'excludedtables', E::ts('Tables for exclusion. If negation is activated, those tables will be included instead', ['domain' => 'at.greenpeace.advancedlogtabled']), $pseudovars['tables'],
       [
         'multiple' => 'multiple',
         'class' => 'crm-select2',

@@ -71,10 +71,15 @@ engine with engine configuration set to `COMPRESSION=tokudb_zlib` has been
 known to work quite well for larger sites, but requires additional software to
 be installed on the database server as well as configuration and tuning.
 
-Additionally, you can select if you want to exclude (or include with negation) specific
+Additionally, you can select if you want to **exclude** (or **include** with negation) specific
 tables from the logging functionality.
 
-This all can be done in the 
+This all can be done in the administration page of this extension on path `/civicrm/admin/advancedlogtables/config?reset=1`.
+Set your tables (optionally of course) that you want to exclude (or include using the negate checkbox) just save the form.
+
+Once the form has been saved, you will need to recreate all the triggers of your site. If you're running Drupal and have drush installed, you can issue: `drush civicrm-sql-rebuild-triggers` which will rebuild the triggers.
+
+Note: Please test it in a test environment before running it in production!
 
 ## Usage
 
