@@ -77,7 +77,10 @@ tables from the logging functionality.
 This all can be done in the administration page of this extension on path `/civicrm/admin/advancedlogtables/config?reset=1`.
 Set your tables (optionally of course) that you want to exclude (or include using the negate checkbox) just save the form.
 
-Once the form has been saved, you will need to recreate all the triggers of your site. If you're running Drupal and have drush installed, you can issue: `drush civicrm-sql-rebuild-triggers` which will rebuild the triggers.
+Once the form has been saved, you will need to recreate all the triggers of your site.
+You ca simply issue this URL : `/civicrm/menu/rebuild?reset=1&triggerRebuild=1` as seen [here](https://docs.civicrm.org/sysadmin/en/latest/troubleshooting/#trigger-rebuild)
+
+Or if you're running Drupal and have drush installed, you can issue: `drush civicrm-sql-rebuild-triggers` which will rebuild the triggers.
 
 Note: Please test it in a test environment before running it in production!
 

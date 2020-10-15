@@ -10,12 +10,7 @@
   </div>
 {/foreach}
 
-{* FIELD EXAMPLE: OPTION 2 (MANUAL LAYOUT)
-
-  <div>
-    <span>{$form.favorite_color.label}</span>
-    <span>{$form.favorite_color.html}</span>
-  </div>
+<div class="help"><h5>Important: After saving, you'll need to rebuild the database triggers.</h5></div>
 
 {* FOOTER *}
 <div class="crm-submit-buttons">
