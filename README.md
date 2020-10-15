@@ -71,6 +71,11 @@ engine with engine configuration set to `COMPRESSION=tokudb_zlib` has been
 known to work quite well for larger sites, but requires additional software to
 be installed on the database server as well as configuration and tuning.
 
+Additionally, you can select if you want to exclude (or include with negation) specific
+tables from the logging functionality.
+
+This all can be done in the 
+
 ## Usage
 
 This extension does not automatically enable detailed logging or change the

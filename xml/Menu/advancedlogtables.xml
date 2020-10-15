@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/admin/advancedlogtables/config</path>
+    <page_callback>CRM_Advancedlogtables_Form_Config</page_callback>
+    <title>Config</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>
