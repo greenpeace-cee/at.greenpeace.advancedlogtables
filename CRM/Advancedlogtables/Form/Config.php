@@ -9,10 +9,15 @@ use CRM_Advancedlogtables_Config as C;
  * @see https://docs.civicrm.org/dev/en/latest/framework/quickform/
  */
 class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
+
   public function buildQuickForm() {
 
     $pseudovars = C::singleton()->getParams();
-    $this->addElement('select', 'excludedtables', E::ts('Tables for exclusion. If negation is activated, those tables will be included instead', ['domain' => 'at.greenpeace.advancedlogtabled']), $pseudovars['tables'],
+    $TablesLabel = [
+      'normal' => E::ts('Tables to <strong>exclude</strong> from logging', ['domain' => 'at.greenpeace.advancedlogtabled']),
+      'negated' => E::ts('Tables to <strong>include</strong> in logging', ['domain' => 'at.greenpeace.advancedlogtabled']),
+    ];
+    $this->addElement('select', 'excludedtables', $TablesLabel['normal'], $pseudovars['tables'],
       [
         'multiple' => 'multiple',
         'class' => 'crm-select2',
@@ -30,6 +35,7 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
+    $this->assign('tablesLabel', $TablesLabel);
     parent::buildQuickForm();
   }
 
@@ -39,7 +45,8 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
 
     if ($values['negateexclusion']) {
       Civi::settings()->set('advancedlogtables_negate_exclusion', 1);
-    } else {
+    }
+    else {
       Civi::settings()->set('advancedlogtables_negate_exclusion', 0);
     }
     CRM_Core_Session::setStatus(E::ts('Configuration settings have been saved'));
@@ -53,7 +60,6 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
     $this->_defaults['negateexclusion'] = $pseudovars['negateexclusion'];
     return $this->_defaults;
   }
-
 
   /**
    * Get the fields/elements defined in this form.

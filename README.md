@@ -75,7 +75,7 @@ Additionally, you can select if you want to **exclude** (or **include** with neg
 tables from the logging functionality.
 
 This all can be done in the administration page of this extension on path `/civicrm/admin/advancedlogtables/config?reset=1`.
-Set your tables (optionally of course) that you want to exclude (or include using the negate checkbox) just save the form.
+Set your tables (optionally of course) that you want to exclude (or include, using the negate checkbox) just save the form.
 
 Once the form has been saved, you will need to recreate all the triggers of your site.
 You ca simply issue this URL : `/civicrm/menu/rebuild?reset=1&triggerRebuild=1` as seen [here](https://docs.civicrm.org/sysadmin/en/latest/troubleshooting/#trigger-rebuild)
