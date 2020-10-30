@@ -42,13 +42,7 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
   public function postProcess() {
     $values = $this->exportValues();
     Civi::settings()->set('advancedlogtables_excludetables', $values['excludedtables']);
-
-    if ($values['negateexclusion']) {
-      Civi::settings()->set('advancedlogtables_negate_exclusion', 1);
-    }
-    else {
-      Civi::settings()->set('advancedlogtables_negate_exclusion', 0);
-    }
+    Civi::settings()->set('advancedlogtables_negate_exclusion', !empty($values['negateexclusion']));
     CRM_Core_Session::setStatus(E::ts('Configuration settings have been saved'));
     parent::postProcess();
   }

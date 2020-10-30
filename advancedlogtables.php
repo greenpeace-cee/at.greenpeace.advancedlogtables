@@ -149,6 +149,9 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
   // Load exclusion table list
   $pseudovars = C::singleton()->getParams();
   $negated = $pseudovars['negateexclusion'];
+  if (empty($pseudovars['excludedtables'])) {
+    $pseudovars['excludedtables'] = [];
+  }
 
   foreach (array_keys($logTableSpec) as $tableName) {
     if (!$negated) {
@@ -189,10 +192,12 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
             $logTableSpec[$tableName]['indexes']['index_id'] = 'id';
           }
         }
-      } else {
+      }
+      else {
         unset($logTableSpec[$tableName]);
       }
-    } else {
+    }
+    else {
       if (in_array($tableName, $pseudovars['excludedtables'])) {
         $logTableSpec[$tableName]['engine'] = Civi::settings()->get('advancedlogtables_storage_engine');
         $logTableSpec[$tableName]['engine_config'] = Civi::settings()->get('advancedlogtables_storage_engine_config');
@@ -230,7 +235,8 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
             $logTableSpec[$tableName]['indexes']['index_id'] = 'id';
           }
         }
-      } else {
+      }
+      else {
         unset($logTableSpec[$tableName]);
       }
     }
@@ -240,7 +246,7 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
 function advancedlogtables_civicrm_navigationMenu(&$menu) {
   $path = "Administer/System Settings";
   _advancedlogtables_civix_insert_navigation_menu($menu, $path, array(
-    'label' => E::ts('Advancedlog Tables'),
+    'label' => E::ts('Advanced Log Tables'),
     'name' => 'advancedlogtables_config',
     'url' => 'civicrm/admin/advancedlogtables/config?reset=1',
     'permission' => 'administer CiviCRM',
@@ -249,4 +255,3 @@ function advancedlogtables_civicrm_navigationMenu(&$menu) {
   ));
   _advancedlogtables_civix_navigationMenu($menu);
 }
-
