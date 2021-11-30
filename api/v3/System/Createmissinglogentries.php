@@ -41,9 +41,17 @@ function civicrm_api3_system_createmissinglogentries($params) {
     $dao = CRM_Core_DAO::executeQuery($query);
     $selectColumns = '';
     $insertColumns = '';
+    $hasId = FALSE;
     while ($dao->fetch()) {
       $selectColumns .= "main.{$dao->COLUMN_NAME}, ";
       $insertColumns .= "{$dao->COLUMN_NAME}, ";
+      if ($dao->COLUMN_NAME == 'id') {
+        $hasId = TRUE;
+      }
+    }
+    // only process tables that have an "id" column
+    if (!$hasId) {
+      continue;
     }
     $insertColumns .= 'log_conn_id, log_user_id, log_action, log_date';
     $selectColumns = "{$selectColumns} @uniqueID AS log_conn_id, @civicrm_user_id AS log_user_id, 'Initialization' AS log_action, NOW() as log_date";
