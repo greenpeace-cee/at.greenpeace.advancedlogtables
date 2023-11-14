@@ -43,7 +43,7 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
     $values = $this->exportValues();
     Civi::settings()->set('advancedlogtables_excludetables', $values['excludedtables']);
 
-    if ($values['negateexclusion']) {
+    if (!empty($values['negateexclusion']) && $values['negateexclusion']) {
       Civi::settings()->set('advancedlogtables_negate_exclusion', 1);
     }
     else {
