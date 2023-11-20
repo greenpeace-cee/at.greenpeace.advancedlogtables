@@ -152,7 +152,7 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
 
   foreach (array_keys($logTableSpec) as $tableName) {
     if (!$negated) {
-      if (!in_array($tableName, $pseudovars['excludedtables'])) {
+      if (!empty($pseudovars['excludedtables']) && !in_array($tableName, $pseudovars['excludedtables'])) {
         $logTableSpec[$tableName]['engine'] = Civi::settings()->get('advancedlogtables_storage_engine');
         $logTableSpec[$tableName]['engine_config'] = Civi::settings()->get('advancedlogtables_storage_engine_config');
         if (Civi::settings()->get('advancedlogtables_index_contact')) {
@@ -193,7 +193,7 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
         unset($logTableSpec[$tableName]);
       }
     } else {
-      if (in_array($tableName, $pseudovars['excludedtables'])) {
+      if (!empty($pseudovars['excludedtables']) && in_array($tableName, $pseudovars['excludedtables'])) {
         $logTableSpec[$tableName]['engine'] = Civi::settings()->get('advancedlogtables_storage_engine');
         $logTableSpec[$tableName]['engine_config'] = Civi::settings()->get('advancedlogtables_storage_engine_config');
         if (Civi::settings()->get('advancedlogtables_index_contact')) {
