@@ -16,7 +16,7 @@ use Civi\Test\TransactionalInterface;
  *
  * @group headless
  */
-class CRM_Advancedlogtables_LogTableTest extends \PHPUnit_Framework_TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+class CRM_Advancedlogtables_LogTableTest extends \CivixPhar\PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
   use \Civi\Test\Api3TestTrait;
 
   public function setUpHeadless() {
