@@ -1,5 +1,6 @@
 {
     "name": "civicrm/advancedlogtables",
+    "type": "civicrm-ext",
     "description": "Advanced settings for detailed logging (log tables)",
     "license": "AGPL-3.0-only",
     "authors": [
