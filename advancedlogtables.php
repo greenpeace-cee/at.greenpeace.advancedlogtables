@@ -44,11 +44,11 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
 
   // Load exclusion table list
   $pseudovars = C::singleton()->getParams();
-  $negated = $pseudovars['negateexclusion'];
-
+  $negated = $pseudovars['negateexclusion'] ?? FALSE;
+  $pseudovars['excludedtables'] = empty($pseudovars['excludedtables']) ? [] : $pseudovars['excludedtables'];
   foreach (array_keys($logTableSpec) as $tableName) {
     if (!$negated) {
-      if (!empty($pseudovars['excludedtables']) && !in_array($tableName, $pseudovars['excludedtables'])) {
+      if (!in_array($tableName, $pseudovars['excludedtables'])) {
         $logTableSpec[$tableName]['engine'] = Civi::settings()->get('advancedlogtables_storage_engine');
         $logTableSpec[$tableName]['engine_config'] = Civi::settings()->get('advancedlogtables_storage_engine_config');
         if (Civi::settings()->get('advancedlogtables_index_contact')) {
@@ -89,7 +89,7 @@ function advancedlogtables_civicrm_alterLogTables(&$logTableSpec) {
         unset($logTableSpec[$tableName]);
       }
     } else {
-      if (!empty($pseudovars['excludedtables']) && in_array($tableName, $pseudovars['excludedtables'])) {
+      if (in_array($tableName, $pseudovars['excludedtables'])) {
         $logTableSpec[$tableName]['engine'] = Civi::settings()->get('advancedlogtables_storage_engine');
         $logTableSpec[$tableName]['engine_config'] = Civi::settings()->get('advancedlogtables_storage_engine_config');
         if (Civi::settings()->get('advancedlogtables_index_contact')) {
