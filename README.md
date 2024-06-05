@@ -1,6 +1,6 @@
 # at.greenpeace.advancedlogtables
 
-[![CircleCI](https://circleci.com/gh/greenpeace-cee/at.greenpeace.advancedlogtables.svg?style=svg)](https://circleci.com/gh/greenpeace-cee/at.greenpeace.advancedlogtables)
+[![Run unit tests](https://github.com/greenpeace-cee/at.greenpeace.advancedlogtables/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/greenpeace-cee/at.greenpeace.advancedlogtables/actions/workflows/unit-tests.yml)
 
 Advanced settings for detailed logging (log tables), largely based on [nz.co.fuzion.innodbtriggers](https://github.com/eileenmcnaughton/nz.co.fuzion.innodbtriggers).
 
