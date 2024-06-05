@@ -16,7 +16,7 @@ use Civi\Test\TransactionalInterface;
  *
  * @group headless
  */
-class CRM_Advancedlogtables_LogTableTest extends \CivixPhar\PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+class CRM_Advancedlogtables_LogTableTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
   use \Civi\Test\Api3TestTrait;
 
   public function setUpHeadless() {
@@ -25,12 +25,12 @@ class CRM_Advancedlogtables_LogTableTest extends \CivixPhar\PHPUnit\Framework\Te
       ->apply();
   }
 
-  public function setUp() {
+  public function setUp(): void {
     $this->resetLogging();
     parent::setUp();
   }
 
-  public function tearDown() {
+  public function tearDown(): void {
     parent::tearDown();
   }
 
