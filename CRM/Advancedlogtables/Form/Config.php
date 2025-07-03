@@ -14,8 +14,8 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
 
     $pseudovars = C::singleton()->getParams();
     $TablesLabel = [
-      'normal' => E::ts('Tables to <strong>exclude</strong> from logging', ['domain' => 'at.greenpeace.advancedlogtabled']),
-      'negated' => E::ts('Tables to <strong>include</strong> in logging', ['domain' => 'at.greenpeace.advancedlogtabled']),
+      'normal' => E::ts('Tables to <strong>exclude</strong> from logging', ['domain' => 'at.greenpeace.advancedlogtables']),
+      'negated' => E::ts('Tables to <strong>include</strong> in logging', ['domain' => 'at.greenpeace.advancedlogtables']),
     ];
     $this->addElement('select', 'excludedtables', $TablesLabel['normal'], $pseudovars['tables'],
       [
@@ -23,7 +23,7 @@ class CRM_Advancedlogtables_Form_Config extends CRM_Core_Form {
         'class' => 'crm-select2',
       ]
     );
-    $this->addElement('checkbox', 'negateexclusion', E::ts('Convert the exclusion into inclusion (negate)', ['domain' => 'at.greenpeace.advancedlogtabled']));
+    $this->addElement('checkbox', 'negateexclusion', E::ts('Convert the exclusion into inclusion (negate)', ['domain' => 'at.greenpeace.advancedlogtables']));
 
     $this->addButtons(array(
       array(
